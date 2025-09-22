@@ -86,3 +86,75 @@ A minimal subscriber that connects to the same public broker and prints all rece
 
 - **Broker**: broker.hivemq.com:1883
 - **Default Topic**: `bilprojekt72439/obd/#` (subscribes to all `obd` messages)
+
+## Viewer App (InfluxDB + FastAPI/UVicorn)
+
+The viewer is a small web app that ingests MQTT data into InfluxDB and serves charts via a FastAPI backend. It ships with a `docker-compose.yml` for a one-command setup.
+
+### Prerequisites
+
+- Docker Desktop installed and running
+- Docker Compose v2 (use `docker compose ...`). If you have the legacy plugin, `docker-compose ...` also works.
+
+### Start
+
+Run from the `viewer/` directory:
+
+```powershell
+# From the repo root:
+pushd viewer
+docker compose up -d --build
+popd
+```
+
+What this does:
+
+- Starts InfluxDB 2.7 on `localhost:8086`
+- Builds and starts the viewer backend on `localhost:8000`
+
+Open in your browser:
+
+- Viewer API/UI: http://localhost:8000
+- InfluxDB UI: http://localhost:8086 (first-time init is automatic per compose file)
+
+Initial Influx credentials (from `viewer/docker-compose.yml`):
+
+- Username: `admin`
+- Password: `admin12345`
+- Org: `obd`
+- Bucket: `obd`
+- Admin Token: `influx-dev-token`
+
+The viewer container is configured with these environment variables:
+
+- `INFLUX_URL=http://influxdb:8086`
+- `INFLUX_ORG=obd`
+- `INFLUX_BUCKET=obd`
+- `INFLUX_TOKEN=influx-dev-token`
+- `MQTT_BROKER_HOST=broker.hivemq.com`
+- `MQTT_BROKER_PORT=1883`
+- `MQTT_TOPIC=bilprojekt72439/obd/#`
+
+If you are also running the demo publisher (`demopub/demopub.py`) with the default topic, the viewer will ingest those messages automatically.
+
+### Logs
+
+```powershell
+pushd viewer
+docker compose logs -f viewer
+popd
+```
+
+### Stop
+
+```powershell
+pushd viewer
+docker compose down
+popd
+```
+
+This stops and removes the containers, but keeps the InfluxDB data in the named volume `influxdb-data`.
+
+### Development note
+
+The image contains the app code by default. For hot-reload in local development, you can mount the app code as a volume by uncommenting/adding a bind in `viewer/docker-compose.yml` and running `uvicorn` with `--reload` (or adjust the compose to do so). The current compose file hints at this in a comment.
