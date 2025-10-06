@@ -1,3 +1,13 @@
+# Deprecated module
+#
+# This file previously hosted a FastAPI app to serve a custom UI.
+# The project has been simplified to use only InfluxDB's built-in UI.
+#
+# The active ingestion process is in `runner.py`, which starts
+# `MQTTInfluxIngestor` from `ingestor.py`.
+
+if __name__ == "__main__":
+    print("viewer.app.main is deprecated. Use runner.py to start the ingestor.")
 from fastapi import FastAPI, Query
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles

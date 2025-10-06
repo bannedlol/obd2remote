@@ -18,10 +18,5 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 # App code
 COPY app /app/app
 
-EXPOSE 8000
-
-ENV APP_HOST=0.0.0.0 \
-    APP_PORT=8000
-
-# Run from the app dir so we can import local modules without package semantics
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--app-dir", "app"]
+# Run the ingestion runner
+CMD ["python", "-u", "app/runner.py"]

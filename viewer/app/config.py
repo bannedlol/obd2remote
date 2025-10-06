@@ -12,10 +12,3 @@ INFLUX_TOKEN = os.getenv("INFLUX_TOKEN", "influx-dev-token")
 INFLUX_ORG = os.getenv("INFLUX_ORG", "obd")
 INFLUX_BUCKET = os.getenv("INFLUX_BUCKET", "obd")
 
-# Retention and query defaults
-RETENTION_HOURS = int(os.getenv("RETENTION_HOURS", "24"))
-DEFAULT_QUERY_HOURS = int(os.getenv("DEFAULT_QUERY_HOURS", "24"))
-
-# App
-APP_HOST = os.getenv("APP_HOST", "0.0.0.0")
-APP_PORT = int(os.getenv("APP_PORT", "8000"))
