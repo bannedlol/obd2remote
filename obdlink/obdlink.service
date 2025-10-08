@@ -1,0 +1,27 @@
+# /etc/systemd/system/obdlink.service
+
+[Unit]
+Description=OBDLink SX MQTT Publisher
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/obdlink
+# If you use a venv, comment the next line and uncomment the venv ExecStart below
+ExecStart=/usr/bin/python3 /home/pi/obdlink/obdlink.py
+# ExecStart=/home/pi/.venv/bin/python /home/pi/obdlink/obdlink.py
+Restart=always
+RestartSec=3
+Nice=-5
+# Environment overrides (edit as needed)
+Environment=MQTT_BROKER_HOST=broker.hivemq.com
+Environment=MQTT_BROKER_PORT=1883
+Environment=MQTT_TOPIC=bilprojekt72439/obd/data
+Environment=OBD_PORT=/dev/ttyUSB0
+Environment=OBD_BAUD=115200
+Environment=PUBLISH_INTERVAL=1.0
+
+[Install]
+WantedBy=multi-user.target
